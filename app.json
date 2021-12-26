@@ -23,8 +23,6 @@
                 "backgroundColor": "#FFFFFF"
             }
         },
-        "web": {
-            "favicon": "./app/assets/favicon.png"
-        }
+        "description": "Share you thoughts with the world!"
     }
 }

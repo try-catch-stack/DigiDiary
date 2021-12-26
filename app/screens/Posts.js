@@ -3,21 +3,35 @@ import { StyleSheet, Text, ScrollView } from 'react-native';
 import PostCard from '../components/PostCard';
 import Screen from '../components/Screen';
 
-const Posts = () => {
+const Posts = ({ navigation }) => {
     return (
         <>
             <ScrollView>
                 <Screen>
-                    <PostCard />
-                    <PostCard />
-                    <PostCard />
-                    <PostCard />
-                    <PostCard />
-                    <PostCard />
-                    <PostCard />
-                    <PostCard />
-                    <PostCard />
-                    <PostCard />
+                    <PostCard
+                        onPress={() => navigation.navigate('PostDetailView')}
+                    />
+                    <PostCard
+                        onPress={() => navigation.navigate('PostDetailView')}
+                    />
+                    <PostCard
+                        onPress={() => navigation.navigate('PostDetailView')}
+                    />
+                    <PostCard
+                        onPress={() => navigation.navigate('PostDetailView')}
+                    />
+                    <PostCard
+                        onPress={() => navigation.navigate('PostDetailView')}
+                    />
+                    <PostCard
+                        onPress={() => navigation.navigate('PostDetailView')}
+                    />
+                    <PostCard
+                        onPress={() => navigation.navigate('PostDetailView')}
+                    />
+                    <PostCard
+                        onPress={() => navigation.navigate('PostDetailView')}
+                    />
                 </Screen>
             </ScrollView>
         </>

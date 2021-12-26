@@ -1,7 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { FontAwesome } from '@expo/vector-icons';
 
 const CustomIcon = ({
@@ -34,7 +32,6 @@ export default CustomIcon;
 const styles = StyleSheet.create({
     icon: {
         alignItems: 'center',
-        // elevation: 10,
         justifyContent: 'center',
     },
 });

@@ -1,10 +1,21 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    TouchableOpacity,
+    TouchableHighlight,
+} from 'react-native';
 import CustomIcon from '../components/Icon';
 
-const PostCard = () => {
+const PostCard = ({ onPress }) => {
     return (
-        <View style={styles.card}>
+        <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.card}
+            onPress={onPress}
+        >
             <View style={styles.cardImage}>
                 <Image
                     source={require('../assets/img1.jpg')}
@@ -42,7 +53,7 @@ const PostCard = () => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 

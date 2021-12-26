@@ -2,7 +2,7 @@ import LottieView from 'lottie-react-native';
 import React from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 
-const Welcome = () => {
+const Welcome = ({ navigation }) => {
     return (
         <View style={styles.welcomeScreen}>
             <View style={styles.animationContainer}>
@@ -22,17 +22,13 @@ const Welcome = () => {
             </View>
             <View style={styles.buttons}>
                 <TouchableOpacity
-                    onPress={() => {
-                        // console.log('Sign Up');
-                    }}
+                    onPress={() => navigation.navigate('SignUp')}
                     style={styles.button}
                 >
                     <Text style={styles.signUpText}>Sign Up</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => {
-                        // console.log('Sign In');
-                    }}
+                    onPress={() => navigation.navigate('SignIn')}
                     style={[styles.button, styles.signInButton]}
                 >
                     <Text style={styles.signInText}>Sign In</Text>
@@ -71,7 +67,6 @@ const styles = StyleSheet.create({
     signInButton: {
         borderColor: '#2b5cd7',
         borderRadius: 15,
-        borderWidth: 2,
         backgroundColor: 'white',
     },
     signUpText: { color: 'white', fontSize: 16, fontWeight: 'bold' },
