@@ -9,7 +9,11 @@ const PostsNavigator = () => {
     return (
         <Stack.Navigator>
             <Stack.Group>
-                <Stack.Screen name="Posts" component={Posts} />
+                <Stack.Screen
+                    name="Posts"
+                    component={Posts}
+                    options={{ headerShown: false }}
+                />
             </Stack.Group>
             <Stack.Group screenOptions={{ presentation: 'modal' }}>
                 <Stack.Screen

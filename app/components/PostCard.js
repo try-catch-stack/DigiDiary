@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    TouchableOpacity,
-    TouchableHighlight,
-} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+
 import CustomIcon from '../components/Icon';
 
 const PostCard = ({ onPress }) => {

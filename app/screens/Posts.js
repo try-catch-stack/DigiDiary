@@ -6,8 +6,8 @@ import Screen from '../components/Screen';
 const Posts = ({ navigation }) => {
     return (
         <>
-            <ScrollView>
-                <Screen>
+            <Screen>
+                <ScrollView>
                     <PostCard
                         onPress={() => navigation.navigate('PostDetailView')}
                     />
@@ -32,8 +32,8 @@ const Posts = ({ navigation }) => {
                     <PostCard
                         onPress={() => navigation.navigate('PostDetailView')}
                     />
-                </Screen>
-            </ScrollView>
+                </ScrollView>
+            </Screen>
         </>
     );
 };

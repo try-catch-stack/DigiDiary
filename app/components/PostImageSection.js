@@ -1,6 +1,8 @@
 import React from 'react';
 import { Image, TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import Constants from 'expo-constants';
+import { BlurView } from 'expo-blur';
+
 import CustomIcon from './Icon';
 
 const PostImageSection = () => {
@@ -11,12 +13,16 @@ const PostImageSection = () => {
                     style={{ height: '100%', width: '100%' }}
                     source={require('../assets/img1.jpg')}
                 />
-                <View style={styles.textContainer}>
+                <BlurView
+                    intensity={30}
+                    tint="dark"
+                    style={styles.textContainer}
+                >
                     <Text style={styles.title}>
                         Some text here Some text here and more text here
                     </Text>
                     <Text style={styles.dateAndTopic}>Date --- Topic</Text>
-                </View>
+                </BlurView>
             </View>
             <View style={styles.actionButtons}>
                 <TouchableOpacity onPress={() => console.log('Shared')}>
@@ -38,6 +44,7 @@ export default PostImageSection;
 const styles = StyleSheet.create({
     actionButtons: {
         bottom: 0,
+        elevation: 15,
         flexDirection: 'row',
         justifyContent: 'space-between',
         position: 'absolute',
@@ -46,6 +53,7 @@ const styles = StyleSheet.create({
     },
     imageSection: {
         borderRadius: 40,
+        elevation: 10,
         height: 350,
         overflow: 'hidden',
     },
@@ -55,11 +63,10 @@ const styles = StyleSheet.create({
         paddingBottom: 15,
     },
     textContainer: {
+        bottom: 0,
+        padding: 25,
         position: 'absolute',
-        bottom: 25,
         width: '100%',
-        padding: 10,
-        paddingLeft: 20,
     },
     title: {
         color: 'white',

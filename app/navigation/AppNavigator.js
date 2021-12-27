@@ -28,7 +28,7 @@ const AddPost = () => {
 
 const AppNavigator = () => {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator screenOptions={{ tabBarShowLabel: false }}>
             <Tab.Screen
                 name="Home"
                 component={PostsNavigator}
