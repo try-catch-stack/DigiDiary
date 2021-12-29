@@ -10,6 +10,8 @@ import {
 import routes from './routes';
 import PostsNavigator from './PostsNavigator';
 import AddPostButton from '../components/AddPostButton';
+import AddPost from '../screens/AddPost';
+import colors from '../config/colors';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,9 +23,6 @@ const Bookmarks = () => {
 };
 const Profile = () => {
     return <Text>Profile</Text>;
-};
-const AddPost = () => {
-    return <Text>Add Post</Text>;
 };
 
 const AppNavigator = () => {
@@ -39,7 +38,7 @@ const AppNavigator = () => {
                     ),
                 }}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Trending"
                 component={Trending}
                 options={{
@@ -51,11 +50,12 @@ const AppNavigator = () => {
                         />
                     ),
                 }}
-            />
+            /> */}
             <Tab.Screen
                 name="AddPost"
                 component={AddPost}
                 options={({ navigation }) => ({
+                    headerShown: false,
                     tabBarButton: () => (
                         <AddPostButton
                             onPress={() => navigation.navigate(routes.ADD_POST)}
@@ -64,6 +64,7 @@ const AppNavigator = () => {
                     tabBarIcon: ({ color, size }) => (
                         <AntDesign name="plus" color={color} size={size} />
                     ),
+                    title: 'Add Post',
                 })}
             />
             <Tab.Screen
@@ -79,7 +80,7 @@ const AppNavigator = () => {
                     ),
                 }}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Profile"
                 component={Profile}
                 options={{
@@ -87,7 +88,7 @@ const AppNavigator = () => {
                         <FontAwesome name="user" color={color} size={size} />
                     ),
                 }}
-            />
+            /> */}
         </Tab.Navigator>
     );
 };

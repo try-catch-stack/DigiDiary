@@ -4,13 +4,13 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 
 import Text from '../CustomText';
 
-function SubmitButton({ title }) {
+function SubmitButton({ title, style }) {
     const { handleSubmit } = useFormikContext();
 
     return (
         <TouchableOpacity
             onPress={handleSubmit}
-            style={[styles.button, styles.signInButton]}
+            style={[styles.button, styles.signInButton, style]}
         >
             <Text
                 style={{

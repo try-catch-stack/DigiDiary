@@ -65,7 +65,6 @@ const SignUp = ({ navigation }) => {
                                 style={{ marginRight: 10 }}
                             />
                         }
-                        // keyboardType="email-address"
                         name="username"
                         placeholder="Username"
                         textContentType="username"
