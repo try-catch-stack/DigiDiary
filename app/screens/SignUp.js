@@ -1,14 +1,26 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import React, { useState, useContext } from 'react';
+import {
+    StyleSheet,
+    TouchableOpacity,
+    View,
+    KeyboardAvoidingView,
+} from 'react-native';
 import * as Yup from 'yup';
-import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, AntDesign } from '@expo/vector-icons';
 
+import authApi from '../api/auth';
+import AuthContext from '../auth/authContext';
 import defaultStyles from '../config/styles';
-import Screen from '../components/Screen';
-import { Form, FormField, SubmitButton } from '../components/forms';
+import {
+    ErrorMessage,
+    Form,
+    FormField,
+    SubmitButton,
+} from '../components/forms';
 import Text from '../components/CustomText';
 import SectionDivider from '../components/forms/SectionDivider';
 import GoogleButton from '../components/forms/GoogleButton';
+import authStorage from '../auth/authStorage';
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required().label('Name'),
@@ -18,8 +30,28 @@ const validationSchema = Yup.object().shape({
 });
 
 const SignUp = ({ navigation }) => {
+    const [signUpError, setSignUpError] = useState(false);
+    const { setUser } = useContext(AuthContext);
+
+    const handleSignUp = async ({ username, email, name, password }) => {
+        const response = await authApi.signUp(username, email, name, password);
+        if (!response.ok) return setSignUpError(true);
+        console.log(response.ok);
+        const signInResponse = await authApi.signIn(username, password);
+        console.log(signInResponse);
+        if (!signInResponse.ok) return setSignUpError(true);
+        setSignUpError(false);
+        authStorage.saveToken(signInResponse.data.auth_token);
+        const userProfile = await authApi.getProfile(response.data.auth_token);
+        setUser(userProfile.data);
+    };
+
     return (
-        <Screen>
+        <KeyboardAvoidingView
+            keyboardVerticalOffset={80}
+            style={{ flex: 1 }}
+            behavior="padding"
+        >
             <View
                 style={{
                     flex: 0.5,
@@ -28,6 +60,10 @@ const SignUp = ({ navigation }) => {
             <GoogleButton buttonText="Sign up" />
             <SectionDivider />
             <View>
+                <ErrorMessage
+                    error="An account with same email/username already exists"
+                    visible={signUpError}
+                />
                 <Form
                     initialValues={{
                         name: '',
@@ -35,15 +71,15 @@ const SignUp = ({ navigation }) => {
                         email: '',
                         password: '',
                     }}
-                    onSubmit={(values) => console.log(values)}
+                    onSubmit={(values) => handleSignUp(values)}
                     validationSchema={validationSchema}
                 >
                     <FormField
                         autoCapitalize="none"
                         autoCorrect={false}
                         icon={
-                            <FontAwesome
-                                name="user"
+                            <AntDesign
+                                name="idcard"
                                 size={20}
                                 color={defaultStyles.colors.medium}
                                 style={{ marginRight: 10 }}
@@ -99,7 +135,7 @@ const SignUp = ({ navigation }) => {
                     <Text style={{ color: '#4285F4' }}>Sign in</Text>
                 </TouchableOpacity>
             </View>
-        </Screen>
+        </KeyboardAvoidingView>
     );
 };
 
