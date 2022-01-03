@@ -7,11 +7,11 @@ import {
     AntDesign,
 } from '@expo/vector-icons';
 
+import BookmarkedPostsNavigator from './BookmarkedPostsNavigator';
 import routes from './routes';
 import PostsNavigator from './PostsNavigator';
 import AddPostButton from '../components/AddPostButton';
 import AddPost from '../screens/AddPost';
-import colors from '../config/colors';
 
 const Tab = createBottomTabNavigator();
 
@@ -69,8 +69,9 @@ const AppNavigator = () => {
             />
             <Tab.Screen
                 name="Bookmarks"
-                component={Bookmarks}
+                component={BookmarkedPostsNavigator}
                 options={{
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                         <FontAwesome
                             name="bookmark-o"

@@ -3,11 +3,12 @@ import { StyleSheet, ScrollView } from 'react-native';
 import PostContent from '../components/PostContent';
 import PostImageSection from '../components/PostImageSection';
 
-const Posts = () => {
+const Posts = ({ route }) => {
+    const { item } = route.params;
     return (
         <ScrollView>
-            <PostImageSection />
-            <PostContent />
+            <PostImageSection post={item} />
+            <PostContent post={item} />
         </ScrollView>
     );
 };

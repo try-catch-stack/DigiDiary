@@ -1,20 +1,42 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import * as Yup from 'yup';
+import { FontAwesome } from '@expo/vector-icons';
+import LottieView from 'lottie-react-native';
 
+import authApi from '../api/auth';
+import AuthContext from '../auth/authContext';
+import authStorage from '../auth/authStorage';
+import defaultStyles from '../config/styles';
 import Screen from '../components/Screen';
-import { Form, FormField, SubmitButton } from '../components/forms';
+import {
+    ErrorMessage,
+    Form,
+    FormField,
+    SubmitButton,
+} from '../components/forms';
 import Text from '../components/CustomText';
 import SectionDivider from '../components/forms/SectionDivider';
 import GoogleButton from '../components/forms/GoogleButton';
-import LottieView from 'lottie-react-native';
 
 const validationSchema = Yup.object().shape({
-    email: Yup.string().required().email().label('Email'),
+    username: Yup.string().required().min(4).label('Username'),
     password: Yup.string().required().min(4).label('Password'),
 });
 
 const SignIn = ({ navigation }) => {
+    const [loginError, setLoginError] = useState(false);
+    const { setUser } = useContext(AuthContext);
+
+    const handleSignIn = async ({ username, password }) => {
+        const response = await authApi.signIn(username, password);
+        if (!response.ok) return setLoginError(true);
+        setLoginError(false);
+        authStorage.saveToken(response.data.auth_token);
+        const userProfile = await authApi.getProfile(response.data.auth_token);
+        setUser(userProfile.data);
+    };
+
     return (
         <Screen>
             <View style={{ flex: 0.8 }}>
@@ -27,19 +49,29 @@ const SignIn = ({ navigation }) => {
             <GoogleButton buttonText="Sign in" />
             <SectionDivider />
             <View>
+                <ErrorMessage
+                    error="Wrong username or password"
+                    visible={loginError}
+                />
                 <Form
-                    initialValues={{ email: '', password: '' }}
-                    onSubmit={(values) => console.log(values)}
+                    initialValues={{ username: '', password: '' }}
+                    onSubmit={(values) => handleSignIn(values)}
                     validationSchema={validationSchema}
                 >
                     <FormField
                         autoCapitalize="none"
                         autoCorrect={false}
-                        icon="email"
-                        keyboardType="email-address"
-                        name="email"
-                        placeholder="Email"
-                        textContentType="emailAddress"
+                        icon={
+                            <FontAwesome
+                                name="user"
+                                size={20}
+                                color={defaultStyles.colors.medium}
+                                style={{ marginRight: 10 }}
+                            />
+                        }
+                        name="username"
+                        placeholder="Username"
+                        textContentType="username"
                         width={'90%'}
                     />
                     <FormField

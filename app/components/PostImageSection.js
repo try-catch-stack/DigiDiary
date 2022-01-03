@@ -5,7 +5,7 @@ import { BlurView } from 'expo-blur';
 
 import CustomIcon from './Icon';
 
-const PostImageSection = () => {
+const PostImageSection = ({ post }) => {
     return (
         <View style={styles.imageSectionContainer}>
             <View style={styles.imageSection}>
@@ -18,10 +18,10 @@ const PostImageSection = () => {
                     tint="dark"
                     style={styles.textContainer}
                 >
-                    <Text style={styles.title}>
-                        Some text here Some text here and more text here
+                    <Text style={styles.title}>{post.title}</Text>
+                    <Text style={styles.dateAndTopic}>
+                        {post.created_at} --- {post.author.username}
                     </Text>
-                    <Text style={styles.dateAndTopic}>Date --- Topic</Text>
                 </BlurView>
             </View>
             <View style={styles.actionButtons}>
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     imageSectionContainer: {
         paddingTop: Constants.statusBarHeight,
         paddingHorizontal: 10,
-        paddingBottom: 15,
+        paddingBottom: 22,
     },
     textContainer: {
         bottom: 0,

@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
+import PostsContext from '../context/postsContext';
+import postsApi from '../api/posts';
+import useApi from '../api/useApi';
 import CustomIcon from '../components/Icon';
 
-const PostCard = ({ onPress }) => {
+const PostCard = ({ onPress, post }) => {
+    const { bookmarkedPosts, setBookmarkedPosts } = useContext(PostsContext);
+    const [bookmarked, setBookmarked] = useState(
+        bookmarkedPosts.includes(post)
+    );
+    const getBookmarkedPostsApi = useApi(postsApi.getBookmarkedPosts);
+
+    const bookMarkPostApi = useApi(postsApi.bookmarkPost);
+
+    const handleBookmark = (post) => {
+        bookMarkPostApi.request(post.id);
+        setBookmarkedPosts(getBookmarkedPostsApi.data);
+    };
+
     return (
         <TouchableOpacity
             activeOpacity={0.8}
@@ -17,11 +33,7 @@ const PostCard = ({ onPress }) => {
                 />
             </View>
             <View style={styles.cardContent}>
-                <Text>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Morbi tincidunt nec velit vitae bibendum. Ut quis finibus
-                    diam.
-                </Text>
+                <Text style={styles.cardTitle}>{post.title}</Text>
                 <View
                     style={{
                         flexDirection: 'row',
@@ -33,11 +45,13 @@ const PostCard = ({ onPress }) => {
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={styles.dateAndAuthor}>Date --- Author</Text>
+                    <Text style={styles.dateAndAuthor}>
+                        {post.created_at} --- {post.author.username}
+                    </Text>
 
                     <TouchableOpacity
                         style={styles.bookmarkButton}
-                        onPress={() => console.log('Bookmarked')}
+                        onPress={() => handleBookmark(post)}
                     >
                         <CustomIcon
                             name="bookmark-o"
@@ -76,6 +90,9 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 15,
         flex: 0.3,
         overflow: 'hidden',
+    },
+    cardTitle: {
+        paddingVertical: 12,
     },
     dateAndAuthor: {
         fontSize: 10,
