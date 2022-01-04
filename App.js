@@ -2,18 +2,28 @@ import React, { useState } from 'react';
 import AppLoading from 'expo-app-loading';
 import AuthNavigator from './app/navigation/AuthNavigator';
 import { NavigationContainer } from '@react-navigation/native';
+import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import { initializeApp } from 'firebase/app';
 
+import firebaseConfig from './app/config/apiKeys';
 import authStorage from './app/auth/authStorage';
 import authApi from './app/api/auth';
 import AuthContext from './app/auth/authContext';
 import navigationTheme from './app/navigation/navigationTheme';
 import AppNavigator from './app/navigation/AppNavigator';
 import PostsContext from './app/context/postsContext';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Setting a timer']);
 
 export default function App() {
     const [user, setUser] = useState();
     const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
     const [isReady, setIsReady] = useState(false);
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    // console.log(db);
 
     const retrieveUser = async () => {
         const authToken = await authStorage.getToken();

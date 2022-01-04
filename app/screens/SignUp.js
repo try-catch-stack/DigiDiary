@@ -8,6 +8,7 @@ import {
 import * as Yup from 'yup';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 
+import ActivityIndicator2 from '../components/ActivityIndicator2';
 import authApi from '../api/auth';
 import AuthContext from '../auth/authContext';
 import defaultStyles from '../config/styles';
@@ -31,9 +32,11 @@ const validationSchema = Yup.object().shape({
 
 const SignUp = ({ navigation }) => {
     const [signUpError, setSignUpError] = useState(false);
+    const [loading, setLoading] = useState(false);
     const { setUser } = useContext(AuthContext);
 
     const handleSignUp = async ({ username, email, name, password }) => {
+        setLoading(true);
         const response = await authApi.signUp(username, email, name, password);
         if (!response.ok) return setSignUpError(true);
         console.log(response.ok);
@@ -44,98 +47,104 @@ const SignUp = ({ navigation }) => {
         authStorage.saveToken(signInResponse.data.auth_token);
         const userProfile = await authApi.getProfile(response.data.auth_token);
         setUser(userProfile.data);
+        setLoading(false);
     };
 
     return (
-        <KeyboardAvoidingView
-            keyboardVerticalOffset={80}
-            style={{ flex: 1 }}
-            behavior="padding"
-        >
-            <View
-                style={{
-                    flex: 0.5,
-                }}
-            ></View>
-            <GoogleButton buttonText="Sign up" />
-            <SectionDivider />
-            <View>
-                <ErrorMessage
-                    error="An account with same email/username already exists"
-                    visible={signUpError}
-                />
-                <Form
-                    initialValues={{
-                        name: '',
-                        username: '',
-                        email: '',
-                        password: '',
+        <>
+            <ActivityIndicator2 visible={loading} />
+            <KeyboardAvoidingView
+                keyboardVerticalOffset={80}
+                style={{ flex: 1 }}
+                behavior="padding"
+            >
+                <View
+                    style={{
+                        flex: 0.5,
                     }}
-                    onSubmit={(values) => handleSignUp(values)}
-                    validationSchema={validationSchema}
-                >
-                    <FormField
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        icon={
-                            <AntDesign
-                                name="idcard"
-                                size={20}
-                                color={defaultStyles.colors.medium}
-                                style={{ marginRight: 10 }}
-                            />
-                        }
-                        name="name"
-                        placeholder="Name"
-                        textContentType="name"
-                        width={'90%'}
+                ></View>
+                {/* <GoogleButton buttonText="Sign up" /> */}
+                <View>
+                    <ErrorMessage
+                        error="An account with same email/username already exists"
+                        visible={signUpError}
                     />
-                    <FormField
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        icon={
-                            <FontAwesome
-                                name="user"
-                                size={20}
-                                color={defaultStyles.colors.medium}
-                                style={{ marginRight: 10 }}
-                            />
-                        }
-                        name="username"
-                        placeholder="Username"
-                        textContentType="username"
-                        width={'90%'}
-                    />
-                    <FormField
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        icon="email"
-                        keyboardType="email-address"
-                        name="email"
-                        placeholder="Email"
-                        textContentType="emailAddress"
-                        width={'90%'}
-                    />
-                    <FormField
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        icon="lock"
-                        name="password"
-                        placeholder="Password"
-                        secureTextEntry
-                        textContentType="password"
-                        width="90%"
-                    />
-                    <SubmitButton title="Sign Up" />
-                </Form>
-            </View>
-            <View style={styles.signInHere}>
-                <Text>Already have an account? </Text>
-                <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-                    <Text style={{ color: '#4285F4' }}>Sign in</Text>
-                </TouchableOpacity>
-            </View>
-        </KeyboardAvoidingView>
+                    <Form
+                        initialValues={{
+                            name: '',
+                            username: '',
+                            email: '',
+                            password: '',
+                        }}
+                        onSubmit={(values) => handleSignUp(values)}
+                        validationSchema={validationSchema}
+                    >
+                        <FormField
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            icon={
+                                <AntDesign
+                                    name="idcard"
+                                    size={20}
+                                    color={defaultStyles.colors.medium}
+                                    style={{ marginRight: 10 }}
+                                />
+                            }
+                            name="name"
+                            placeholder="Name"
+                            textContentType="name"
+                            width={'90%'}
+                        />
+                        <FormField
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            icon={
+                                <FontAwesome
+                                    name="user"
+                                    size={20}
+                                    color={defaultStyles.colors.medium}
+                                    style={{ marginRight: 10 }}
+                                />
+                            }
+                            name="username"
+                            placeholder="Username"
+                            textContentType="username"
+                            width={'90%'}
+                        />
+                        <FormField
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            icon="email"
+                            keyboardType="email-address"
+                            name="email"
+                            placeholder="Email"
+                            textContentType="emailAddress"
+                            width={'90%'}
+                        />
+                        <FormField
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            icon="lock"
+                            name="password"
+                            placeholder="Password"
+                            secureTextEntry
+                            textContentType="password"
+                            width="90%"
+                        />
+                        <SubmitButton title="Sign Up" />
+                    </Form>
+                </View>
+                <SectionDivider />
+                <View style={styles.signInHere}>
+                    <Text>Already have an account? </Text>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('SignIn')}
+                    >
+                        <Text style={{ color: '#4285F4' }}>Sign in</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
+        </>
     );
 };
 
