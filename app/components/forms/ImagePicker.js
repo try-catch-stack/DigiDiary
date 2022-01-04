@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
+import { useFormikContext } from 'formik';
 import { StyleSheet, TouchableOpacity, View, Image, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import ErrorMessage from './ErrorMessage';
 import colors from '../../config/colors';
 
-const CustomImagePicker = () => {
-    const [image, setImage] = useState('');
+const CustomImagePicker = ({ name, ...otherProps }) => {
+    const { setFieldTouched, setFieldValue, errors, touched, values } =
+        useFormikContext();
+
+    // const [image, setImage] = useState('');
+    const image = values[name];
     const openImagePickerAsync = async () => {
         let permissionResult =
             await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -17,17 +23,20 @@ const CustomImagePicker = () => {
         }
 
         let pickerResult = await ImagePicker.launchImageLibraryAsync();
-        setImage(pickerResult.uri);
+        // setImage(pickerResult.uri);
+        setFieldValue(name, pickerResult.uri);
     };
     const removeImage = () => {
         Alert.alert('Delete', 'Are you sure you want to delete this image?', [
-            { text: 'Yes', onPress: () => setImage(null) },
+            { text: 'Yes', onPress: () => setFieldValue(name, null) },
             { text: 'No' },
         ]);
+
+        setFieldTouched(true);
     };
 
     return (
-        <View>
+        <View style={{ alignItems: 'center' }}>
             {!image ? (
                 <TouchableOpacity
                     onPress={openImagePickerAsync}
@@ -60,6 +69,7 @@ const CustomImagePicker = () => {
                     </View>
                 </>
             )}
+            <ErrorMessage error={errors[name]} visible={touched[name]} />
         </View>
     );
 };

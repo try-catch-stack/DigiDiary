@@ -1,23 +1,22 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
+import AuthContext from '../auth/authContext';
 import PostsContext from '../context/postsContext';
 import postsApi from '../api/posts';
 import useApi from '../api/useApi';
 import CustomIcon from '../components/Icon';
+import bookmarkToast from './BookmarkToast';
 
-const PostCard = ({ onPress, post }) => {
+const PostCard = ({ onPress, post, bookmarked = false }) => {
     const { bookmarkedPosts, setBookmarkedPosts } = useContext(PostsContext);
-    const [bookmarked, setBookmarked] = useState(
-        bookmarkedPosts.includes(post)
-    );
+    const { user } = useContext(AuthContext);
     const getBookmarkedPostsApi = useApi(postsApi.getBookmarkedPosts);
 
-    const bookMarkPostApi = useApi(postsApi.bookmarkPost);
-
-    const handleBookmark = (post) => {
-        bookMarkPostApi.request(post.id);
+    const handleBookmark = async (post) => {
+        const response = await postsApi.bookmarkPost(post.id);
         setBookmarkedPosts(getBookmarkedPostsApi.data);
+        bookmarkToast(user, response);
     };
 
     return (
@@ -53,11 +52,19 @@ const PostCard = ({ onPress, post }) => {
                         style={styles.bookmarkButton}
                         onPress={() => handleBookmark(post)}
                     >
-                        <CustomIcon
-                            name="bookmark-o"
-                            backgroundColor={'#F5F5F5'}
-                            size={35}
-                        />
+                        {bookmarked ? (
+                            <CustomIcon
+                                name="bookmark"
+                                backgroundColor={'#F5F5F5'}
+                                size={35}
+                            />
+                        ) : (
+                            <CustomIcon
+                                name="bookmark-o"
+                                backgroundColor={'#F5F5F5'}
+                                size={35}
+                            />
+                        )}
                     </TouchableOpacity>
                 </View>
             </View>

@@ -42,7 +42,7 @@ const SignIn = ({ navigation }) => {
             <View style={{ flex: 0.8 }}>
                 <LottieView
                     autoPlay
-                    loop={true}
+                    loop
                     source={require('../assets/login.json')}
                 />
             </View>

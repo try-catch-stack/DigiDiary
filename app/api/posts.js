@@ -26,18 +26,12 @@ const bookmarkPost = async (post_id) => {
 export const addPost = (post, onUploadProgress) => {
     const data = new FormData();
     data.append('title', post.title);
-    data.append('topic', 'Topic');
-    data.append('post_content', post.content);
+    data.append('topic', post.topic.label);
+    data.append('post_content', post.post);
 
-    //   post.images.forEach((image, index) =>
-    //     data.append("images", {
-    //       name: "image" + index,
-    //       type: "image/jpeg",
-    //       uri: image,
-    //     })
-    //   );
-
-    return client.post(endpoint, data);
+    return client.post(endpoint, data, {
+        headers: { Authorization: 'Token ' + token },
+    });
 };
 
 export default {

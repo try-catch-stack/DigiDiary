@@ -1,11 +1,33 @@
-import React from 'react';
-import { Image, TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import React, { useContext } from 'react';
+import {
+    Image,
+    TouchableOpacity,
+    StyleSheet,
+    Text,
+    View,
+    ToastAndroid,
+} from 'react-native';
 import Constants from 'expo-constants';
 import { BlurView } from 'expo-blur';
 
+import AuthContext from '../auth/authContext';
+import PostsContext from '../context/postsContext';
+import postsApi from '../api/posts';
+import useApi from '../api/useApi';
 import CustomIcon from './Icon';
+import bookmarkToast from './BookmarkToast';
 
 const PostImageSection = ({ post }) => {
+    const { bookmarkedPosts, setBookmarkedPosts } = useContext(PostsContext);
+    const { user } = useContext(AuthContext);
+    const getBookmarkedPostsApi = useApi(postsApi.getBookmarkedPosts);
+
+    const handleBookmark = async (post) => {
+        const response = await postsApi.bookmarkPost(post.id);
+        setBookmarkedPosts(getBookmarkedPostsApi.data);
+        bookmarkToast(user, response);
+    };
+
     return (
         <View style={styles.imageSectionContainer}>
             <View style={styles.imageSection}>
@@ -31,7 +53,7 @@ const PostImageSection = ({ post }) => {
                 <TouchableOpacity onPress={() => console.log('Liked')}>
                     <CustomIcon name="heart" iconColor="red" elevation={10} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => console.log('Bookmarked')}>
+                <TouchableOpacity onPress={() => handleBookmark(post)}>
                     <CustomIcon name="bookmark-o" elevation={10} />
                 </TouchableOpacity>
             </View>

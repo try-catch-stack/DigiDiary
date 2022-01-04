@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
 
+import ActivityIndicator from '../components/ActivityIndicator';
 import PostCard from '../components/PostCard';
 import Screen from '../components/Screen';
 import useApi from '../api/useApi';
 import postsApi from '../api/posts';
 
 const Posts = ({ navigation }) => {
+    const [loading, setLoading] = useState(false);
     const getPostsApi = useApi(postsApi.getPosts);
     const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         getPostsApi.request();
+        setLoading(false);
     }, []);
 
     const renderPost = ({ item }) => (
@@ -28,6 +32,7 @@ const Posts = ({ navigation }) => {
     return (
         <>
             <Screen>
+                <ActivityIndicator visible={loading} />
                 <FlatList
                     data={getPostsApi.data}
                     renderItem={renderPost}

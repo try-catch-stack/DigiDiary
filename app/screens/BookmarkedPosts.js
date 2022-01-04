@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
+import ActivityIndicator from '../components/ActivityIndicator';
 import PostsContext from '../context/postsContext';
 import PostCard from '../components/PostCard';
 import useApi from '../api/useApi';
@@ -8,12 +9,15 @@ import postsApi from '../api/posts';
 import Text from '../components/CustomText';
 
 const BookmarkedPosts = ({ navigation }) => {
+    const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const { bookmarkedPosts, setBookmarkedPosts } = useContext(PostsContext);
     const getPostsApi = useApi(postsApi.getBookmarkedPosts);
 
     useEffect(() => {
+        setLoading(true);
         getPostsApi.request();
+        setLoading(false);
         setBookmarkedPosts(getPostsApi.data);
     }, [bookmarkedPosts]);
 
@@ -22,6 +26,7 @@ const BookmarkedPosts = ({ navigation }) => {
             key={item.id}
             onPress={() => navigation.navigate('PostDetailView', { item })}
             post={item}
+            bookmarked={true}
         />
     );
     const handleRefresh = () => {
@@ -30,6 +35,7 @@ const BookmarkedPosts = ({ navigation }) => {
 
     return (
         <>
+            <ActivityIndicator visible={loading} />
             {getPostsApi.data.length > 0 ? (
                 <FlatList
                     data={getPostsApi.data}
