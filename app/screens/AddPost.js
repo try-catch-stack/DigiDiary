@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { Alert, ScrollView, StyleSheet } from 'react-native';
 import * as Yup from 'yup';
 import Constants from 'expo-constants';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import uuid from 'uuid';
 
+import AuthContext from '../auth/authContext';
 import ActivityIndicator from '../components/ActivityIndicator';
 import authStorage from '../auth/authStorage';
 import client from '../api/client';
-import postsApi from '../api/posts';
-import useApi from '../api/useApi';
 import ImagePicker from '../components/forms/ImagePicker';
 import {
     ErrorMessage,
@@ -30,6 +31,9 @@ const AddPost = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [saved, setSaved] = useState(false);
     const [error, setError] = useState(false);
+
+    const { firebaseApp } = useContext(AuthContext);
+    const storage = getStorage(firebaseApp);
 
     const topics = [
         {
@@ -82,14 +86,40 @@ const AddPost = ({ navigation }) => {
         },
     ];
 
-    const addPostApi = useApi(postsApi);
+    const uploadImage = async (uri) => {
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                console.log(e);
+                reject(new TypeError('Network request failed'));
+            };
+            xhr.responseType = 'blob';
+            xhr.open('GET', uri, true);
+            xhr.send(null);
+        });
+        const unique_id = uuid.v4();
+        const imageRef = ref(storage, unique_id);
+        try {
+            const snapshot = await uploadBytes(imageRef, blob);
+            const image_url = await getDownloadURL(ref(storage, unique_id));
+            return image_url;
+        } catch (err) {
+            Alert('There was an error uploading the image!');
+        }
+        return null;
+    };
 
     const handleSubmit = async (values, { resetForm }) => {
         setLoading(true);
         const data = new FormData();
         data.append('title', values.title);
         data.append('topic', values.topic.label);
-        data.append('image_url', 'http://127.0.0.1:8000/');
+        const image_url = await uploadImage(values.image);
+        console.log(image_url);
+        data.append('image_url', image_url);
         data.append('post_content', values.post);
         const token = await authStorage.getToken();
         const response = await client.post('/app/posts/', data, {

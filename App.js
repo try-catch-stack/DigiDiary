@@ -4,6 +4,7 @@ import AuthNavigator from './app/navigation/AuthNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import { initializeApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
 
 import firebaseConfig from './app/config/apiKeys';
 import authStorage from './app/auth/authStorage';
@@ -21,9 +22,10 @@ export default function App() {
     const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
     const [isReady, setIsReady] = useState(false);
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    // console.log(db);
+    const firebaseApp = initializeApp(firebaseConfig);
+    // const storage = getStorage(firebaseApp);
+
+    // const db = getFirestore(app);
 
     const retrieveUser = async () => {
         const authToken = await authStorage.getToken();
@@ -42,7 +44,7 @@ export default function App() {
         );
 
     return (
-        <AuthContext.Provider value={{ user, setUser }}>
+        <AuthContext.Provider value={{ user, setUser, firebaseApp }}>
             <PostsContext.Provider
                 value={{ bookmarkedPosts, setBookmarkedPosts }}
             >

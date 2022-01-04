@@ -12,7 +12,6 @@ const PostCard = ({ onPress, post, bookmarked = false }) => {
     const { bookmarkedPosts, setBookmarkedPosts } = useContext(PostsContext);
     const { user } = useContext(AuthContext);
     const getBookmarkedPostsApi = useApi(postsApi.getBookmarkedPosts);
-
     const handleBookmark = async (post) => {
         const response = await postsApi.bookmarkPost(post.id);
         setBookmarkedPosts(getBookmarkedPostsApi.data);
@@ -27,7 +26,9 @@ const PostCard = ({ onPress, post, bookmarked = false }) => {
         >
             <View style={styles.cardImage}>
                 <Image
-                    source={require('../assets/img1.jpg')}
+                    source={{
+                        uri: post.image_url,
+                    }}
                     style={{ height: '100%', width: 120 }}
                 />
             </View>

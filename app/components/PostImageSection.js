@@ -33,7 +33,7 @@ const PostImageSection = ({ post }) => {
             <View style={styles.imageSection}>
                 <Image
                     style={{ height: '100%', width: '100%' }}
-                    source={require('../assets/img1.jpg')}
+                    source={{ uri: post.image_url }}
                 />
                 <BlurView
                     intensity={30}
