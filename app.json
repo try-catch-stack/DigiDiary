@@ -8,7 +8,7 @@
         "splash": {
             "image": "./app/assets/splash.png",
             "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
+            "backgroundColor": "#4285F4"
         },
         "updates": {
             "fallbackToCacheTimeout": 0
@@ -21,7 +21,8 @@
             "adaptiveIcon": {
                 "foregroundImage": "./app/assets/adaptive-icon.png",
                 "backgroundColor": "#FFFFFF"
-            }
+            },
+            "package": "com.digi_diary"
         },
         "description": "Share you thoughts with the world!"
     }

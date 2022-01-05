@@ -60,8 +60,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     descText: {
-        fontSize: 15,
+        fontSize: 18,
         marginTop: 10,
+        fontFamily: 'sans-serif-light',
     },
     signInText: { color: '#2b5cd7', fontSize: 16, fontWeight: 'bold' },
     signInButton: {
@@ -70,7 +71,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     signUpText: { color: 'white', fontSize: 16, fontWeight: 'bold' },
-    titleText: { fontSize: 20, fontWeight: 'bold' },
+    titleText: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        fontFamily: 'sans-serif-condensed',
+    },
     welcomeAnimation: {
         width: 300,
         marginTop: 50,
