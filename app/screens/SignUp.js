@@ -4,6 +4,7 @@ import {
     TouchableOpacity,
     View,
     KeyboardAvoidingView,
+    Keyboard,
 } from 'react-native';
 import * as Yup from 'yup';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
@@ -37,6 +38,7 @@ const SignUp = ({ navigation }) => {
 
     const handleSignUp = async ({ username, email, name, password }) => {
         setLoading(true);
+        Keyboard.dismiss();
         const response = await authApi.signUp(username, email, name, password);
         if (!response.ok) return setSignUpError(true);
         console.log(response.ok);

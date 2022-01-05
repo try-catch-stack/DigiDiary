@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Keyboard, StyleSheet, TouchableOpacity, View } from 'react-native';
 import * as Yup from 'yup';
 import { FontAwesome } from '@expo/vector-icons';
 import LottieView from 'lottie-react-native';
@@ -32,6 +32,7 @@ const SignIn = ({ navigation }) => {
 
     const handleSignIn = async ({ username, password }) => {
         setLoading(true);
+        Keyboard.dismiss();
         const response = await authApi.signIn(username, password);
         if (!response.ok) {
             setLoading(false);

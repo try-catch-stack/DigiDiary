@@ -5,7 +5,7 @@ import {
     StyleSheet,
     Text,
     View,
-    ToastAndroid,
+    Share,
 } from 'react-native';
 import Constants from 'expo-constants';
 import { BlurView } from 'expo-blur';
@@ -28,6 +28,17 @@ const PostImageSection = ({ post }) => {
         bookmarkToast(user, response);
     };
 
+    const handleShare = async (post) => {
+        try {
+            const response = await Share.share({
+                title: post.title,
+                message: post.post_content,
+            });
+        } catch (err) {
+            console.log('Error ' + err);
+        }
+    };
+
     return (
         <View style={styles.imageSectionContainer}>
             <View style={styles.imageSection}>
@@ -47,7 +58,7 @@ const PostImageSection = ({ post }) => {
                 </BlurView>
             </View>
             <View style={styles.actionButtons}>
-                <TouchableOpacity onPress={() => console.log('Shared')}>
+                <TouchableOpacity onPress={() => handleShare(post)}>
                     <CustomIcon name="share" elevation={10} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => console.log('Liked')}>
